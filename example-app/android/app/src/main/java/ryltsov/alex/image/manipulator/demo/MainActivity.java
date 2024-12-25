@@ -1,4 +1,4 @@
-package com.example.plugin;
+package ryltsov.alex.image.manipulator.demo;
 
 import com.getcapacitor.BridgeActivity;
 
