@@ -19,7 +19,9 @@
     "build:dev:ios:copy": "npm run build:dev && cap copy --inline ios",
     "build:dev:ios:sync": "npm run build:dev && cap sync --inline ios",
     "build:dev:ios:sync:open": "npm run build:dev:ios:sync && cap open ios",
-    "clear:cache": "rm -rf .angular/cache"
+    "clear:cache": "rm -rf .angular/cache",
+    "open:android": "cd .. && npm run build && cd example-app && npm run build:dev:android:sync:open",
+    "sync:android": "cd .. && npm run build && cd example-app && npm run build:dev:android:sync"
   },
   "private": true,
   "dependencies": {
@@ -31,14 +33,15 @@
     "@angular/platform-browser": "^19.0.0",
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
+    "@capacitor-community/image-manipulator": "file:..",
     "@capacitor/android": "6.2.0",
     "@capacitor/app": "6.0.2",
+    "@capacitor/camera": "^6.1.2",
     "@capacitor/core": "6.2.0",
     "@capacitor/haptics": "6.0.2",
     "@capacitor/ios": "6.2.0",
     "@capacitor/keyboard": "6.0.3",
     "@capacitor/status-bar": "6.0.2",
-    "@capacitor-community/image-manipulator": "file:..",
     "@ionic/angular": "^8.0.0",
     "ionicons": "^7.0.0",
     "rxjs": "~7.8.0",

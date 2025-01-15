@@ -13,12 +13,28 @@
     </ion-toolbar>
   </ion-header>
 
+  <ng-container *ngIf="originalImageWebPath">
+    <span>Original Photo</span>
+    <img alt="Photo" class="original-photo" id="originalImage" />
+  </ng-container>
+
+  <ng-container *ngIf="resizedImageWebPath">
+    <span>Resized Photo</span>
+    <img alt="Resized Photo" class="resized-photo" id="resizedImage" />
+  </ng-container>
+
+  <!-- <ion-card>
+    <ion-card-content>
+      <ion-button (click)="echo()">Echo</ion-button>
+    </ion-card-content>
+  </ion-card> -->
+
   <ion-card>
     <ion-card-header>
       <ion-card-title>Image Manipulator</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-button (click)="echo()">Echo</ion-button>
+      <ion-button (click)="resize()">Resize</ion-button>
     </ion-card-content>
   </ion-card>
 
