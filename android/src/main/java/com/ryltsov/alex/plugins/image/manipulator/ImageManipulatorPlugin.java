@@ -1,44 +1,14 @@
 package com.ryltsov.alex.plugins.image.manipulator;
 
-import android.annotation.SuppressLint;
-import android.content.ContentUris;
-import android.content.Context;
-import android.database.Cursor;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-
-import androidx.core.content.FileProvider;
-
 import com.getcapacitor.JSObject;
-import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-
-import android.os.Environment;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
-import android.util.Log;
-
 @CapacitorPlugin(name = "ImageManipulator")
 public class ImageManipulatorPlugin extends Plugin {
 
-    private static final String TAG = "ImageManipulatorPlugin";
-
-    // private ImageManipulator implementation = new ImageManipulator();
-    /*
-    private final ImageManipulator implementation = new ImageManipulator(
-            getContext(),
-            getBridge()
-    );
-    */
     private ImageManipulator implementation;
 
     @Override
@@ -47,22 +17,17 @@ public class ImageManipulatorPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void echo(PluginCall call) {
-        String value = call.getString("value");
+    public void getDimensions(PluginCall call) {
 
-        JSObject ret = new JSObject();
-        ret.put("value", implementation.echo(value));
-        call.resolve(ret);
-    }
+        String imagePath = call.getString("imagePath");
 
-    @PluginMethod
-    public void getDimension(PluginCall call) {
-        String imageUri = call.getString("imageUri");
-
-        // TODO: add check that imageUri is defined
+        if (imagePath == null || imagePath.isEmpty()) {
+            call.reject("The imagePath param is null or empty.");
+            return;
+        }
 
         try {
-            ImageDimensions dimensions = implementation.getDimensions(imageUri);
+            ImageDimensions dimensions = implementation.getDimensions(imagePath);
             JSObject ret = new JSObject();
             ret.put("width", dimensions.width());
             ret.put("height", dimensions.height());
@@ -77,31 +42,38 @@ public class ImageManipulatorPlugin extends Plugin {
     @PluginMethod
     public void resize(PluginCall call) {
 
-        String imageUri = call.getString("imageUri");
-        // TODO: add check that imageUri is defined
+        String imagePath = call.getString("imagePath");
+        if (imagePath == null || imagePath.isEmpty()) {
+            call.reject("The imagePath param is null or empty.");
+            return;
+        }
 
-        String folderName = "BOSS811ResizedImages";
-        String fileName = "resized";
-        int quality = 85;
-        int requiredWidth = 100;
-        int requiredHeight = 200;
-        boolean fixRotation = false;
+        String folderName = call.getString("folderName", "ResizedImages");
+        String fileName = call.getString("fileName");
+        int quality = call.getInt("quality", 85);
+        int maxWidth = call.getInt("maxWidth", 0);
+        int maxHeight = call.getInt("maxHeight", 0);
+        if (maxWidth <= 0 && maxHeight <= 0) {
+            call.reject("Either maxWidth or maxHeight param must be provided and be greater then 0.");
+            return;
+        }
+        boolean fixRotation = call.getBoolean("fixRotation", false); // false;
 
         try {
             ImageResizingResult result = implementation.resize(
-                    imageUri,
+                    imagePath,
                     folderName,
                     fileName,
                     quality,
-                    requiredWidth,
-                    requiredHeight,
+                    maxWidth,
+                    maxHeight,
                     fixRotation
             );
             JSObject ret = new JSObject();
             ret.put("originalWidth", result.originalWidth());
             ret.put("originalHeight", result.originalHeight());
-            ret.put("finalWidth", result.finalWidth());
-            ret.put("finalHeight", result.finalHeight());
+            ret.put("resizedWidth", result.resizedWidth());
+            ret.put("resizedHeight", result.maxHeight());
             ret.put("imagePath", result.imagePath());
             ret.put("webPath", result.webPath());
             ret.put("resized", result.resized());

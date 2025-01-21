@@ -3,8 +3,8 @@ package com.ryltsov.alex.plugins.image.manipulator;
 public record ImageResizingResult(
         int originalWidth,
         int originalHeight,
-        int finalWidth,
-        int finalHeight,
+        int resizedWidth,
+        int maxHeight,
         String imagePath,
         String webPath,
         boolean resized

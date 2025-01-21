@@ -39,10 +39,9 @@ This plugins allows to resize images.
 
 **Features:**
 
+- supports getting image dimensions
 - supports resizing image
 - supports Android and iOS platforms
-
-**NOTE**: The plugin version 1.0.0 is compatible with Capacitor 5 which requires gradle version 8.0
 
 ## Plugin versions
 
@@ -66,25 +65,30 @@ npx cap sync
 
 <docgen-index>
 
-* [`echo(...)`](#echo)
+* [`getDimensions(...)`](#getdimensions)
 * [`resize(...)`](#resize)
+* [Interfaces](#interfaces)
 
 </docgen-index>
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### echo(...)
+### getDimensions(...)
 
 ```typescript
-echo(options: { value: string; }) => Promise<{ value: string; }>
+getDimensions(options: GetDimensionsOptions) => Promise<{ width: number; height: number; }>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
+Get dimensions of an image (width and height)
 
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+| Param         | Type                                                                  | Description                           |
+| ------------- | --------------------------------------------------------------------- | ------------------------------------- |
+| **`options`** | <code><a href="#getdimensionsoptions">GetDimensionsOptions</a></code> | options to get dimensions of an image |
+
+**Returns:** <code>Promise&lt;{ width: number; height: number; }&gt;</code>
+
+**Since:** 6.0.0
 
 --------------------
 
@@ -92,16 +96,44 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 ### resize(...)
 
 ```typescript
-resize(options: { imageUri: string; }) => Promise<{ originalWidth: number; originalHeight: number; finalWidth: number; finalHeight: number; imagePath: string; webPath: string; resized: boolean; }>
+resize(options: ResizeOptions) => Promise<{ originalWidth: number; originalHeight: number; resizedWidth: number; resizedHeight: number; imagePath: string; webPath: string; resized: boolean; }>
 ```
 
-| Param         | Type                               |
-| ------------- | ---------------------------------- |
-| **`options`** | <code>{ imageUri: string; }</code> |
+Method to resize an image
+If the image width and height are less than the provided maxWidth and maxHeight, the image will not be resized.
 
-**Returns:** <code>Promise&lt;{ originalWidth: number; originalHeight: number; finalWidth: number; finalHeight: number; imagePath: string; webPath: string; resized: boolean; }&gt;</code>
+| Param         | Type                                                    | Description                |
+| ------------- | ------------------------------------------------------- | -------------------------- |
+| **`options`** | <code><a href="#resizeoptions">ResizeOptions</a></code> | Options to resize an image |
+
+**Returns:** <code>Promise&lt;{ originalWidth: number; originalHeight: number; resizedWidth: number; resizedHeight: number; imagePath: string; webPath: string; resized: boolean; }&gt;</code>
+
+**Since:** 6.0.0
 
 --------------------
+
+
+### Interfaces
+
+
+#### GetDimensionsOptions
+
+| Prop            | Type                | Description                                  | Since |
+| --------------- | ------------------- | -------------------------------------------- | ----- |
+| **`imagePath`** | <code>string</code> | The path to the image to get its dimensions. | 6.0.0 |
+
+
+#### ResizeOptions
+
+| Prop              | Type                 | Description                                                                                                 | Since |
+| ----------------- | -------------------- | ----------------------------------------------------------------------------------------------------------- | ----- |
+| **`imagePath`**   | <code>string</code>  | The path to the image to resize.                                                                            | 6.0.0 |
+| **`folderName`**  | <code>string</code>  | The name of the folder to store the resized images (optional, defaults to 'ResizedImages' if not provided). | 6.0.0 |
+| **`fileName`**    | <code>string</code>  | The name of the resized file without extension (optional, timestamp as name if not provided).               | 6.0.0 |
+| **`quality`**     | <code>number</code>  | The resized image quality (optional, defaults to 85 if not provided).                                       | 6.0.0 |
+| **`maxWidth`**    | <code>number</code>  | The max width of the resized image (optional, but at least either height or width must be provided).        | 6.0.0 |
+| **`maxHeight`**   | <code>number</code>  | The max height of the resized image (optional, but at least either width or height must be provided).       | 6.0.0 |
+| **`fixRotation`** | <code>boolean</code> | Fix the rotation of the image based on EXIF metadata (optional, defaults to false if not provided).         | 6.0.0 |
 
 </docgen-api>
 
@@ -112,6 +144,25 @@ resize(options: { imageUri: string; }) => Promise<{ originalWidth: number; origi
 ```
 import { ImageManipulator } from '@capacitor-community/image-manipulator';
 
-const options: ImageResizeOptions = {};
-await ImageManipulator.resize(options);
+const options: ImageResizeOptions = {
+  imagePath: 'path/to/image.jpg',
+  maxWidth: 300,
+  maxHeight: 300,
+  quality: 85,
+  folderName: 'ResizedImages',
+  fileName: 'resized',
+  fixRotation: true
+};
+const result = await ImageManipulator.resize(options);
+```
+
+### Resize image
+
+```
+import { ImageManipulator } from '@capacitor-community/image-manipulator';
+
+const options: GetDimensionsOptions = {
+  imagePath: 'path/to/image.jpg'
+};
+const result = await ImageManipulator.getDimensions(options);
 ```

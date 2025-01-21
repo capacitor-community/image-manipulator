@@ -6,8 +6,8 @@ public record ImageResizingResultBase(
         Bitmap scaledBitmap,
         int originalWidth,
         int originalHeight,
-        int finalWidth,
-        int finalHeight,
+        int resizedWidth,
+        int resizedHeight,
         boolean resized
 ) {
 }

@@ -13,29 +13,44 @@
     </ion-toolbar>
   </ion-header>
 
+  <ion-toolbar class="button-toolbar">
+    <ion-buttons>
+      <ion-button color="primary" fill="solid" (click)="getDimensions()">Get Dimensions</ion-button>
+      <ion-button color="secondary" fill="solid" (click)="resize()">Resize</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-list>
+    <ion-item>
+      <ion-input label="Max Width" labelPlacement="stacked" type="number" placeholder="Enter value" [(ngModel)]="maxWidth"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input label="Max Height" labelPlacement="stacked" type="number" placeholder="Enter value" [(ngModel)]="maxHeight"></ion-input>
+    </ion-item>
+  </ion-list>
+
   <ng-container *ngIf="originalImageWebPath">
-    <span>Original Photo</span>
-    <img alt="Photo" class="original-photo" id="originalImage" />
+    <div class="title">Original Image/Photo</div>
+    <div class="image-container">
+      <img alt="Photo" class="original-photo" id="originalImage" />
+    </div>
+    <ion-label *ngIf="originalImageDimensions?.width && originalImageDimensions?.height" class="info-details">
+      <h2>Original Image Dimensions</h2>
+      <p>Width: {{ originalImageDimensions?.width }}</p>
+      <p>Height: {{ originalImageDimensions?.height }}</p>
+    </ion-label>
   </ng-container>
 
   <ng-container *ngIf="resizedImageWebPath">
-    <span>Resized Photo</span>
-    <img alt="Resized Photo" class="resized-photo" id="resizedImage" />
+    <div class="title">Resized Image/Photo</div>
+    <div class="image-container">
+      <img alt="Resized Photo" class="resized-photo" id="resizedImage" />
+    </div>
+    <ion-label *ngIf="resizedImageDimensions?.width && resizedImageDimensions?.height" class="info-details">
+      <h2>Resized Image Dimensions</h2>
+      <p>Width: {{ resizedImageDimensions?.width }}</p>
+      <p>Height: {{ resizedImageDimensions?.height }}</p>
+      <p>Resized: {{ resized }}</p>
+    </ion-label>
   </ng-container>
-
-  <!-- <ion-card>
-    <ion-card-content>
-      <ion-button (click)="echo()">Echo</ion-button>
-    </ion-card-content>
-  </ion-card> -->
-
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Image Manipulator</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-button (click)="resize()">Resize</ion-button>
-    </ion-card-content>
-  </ion-card>
 
 </ion-content>
