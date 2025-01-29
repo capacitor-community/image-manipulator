@@ -125,15 +125,15 @@ If the image width and height are less than the provided maxWidth and maxHeight,
 
 #### ResizeOptions
 
-| Prop              | Type                 | Description                                                                                                 | Since |
-| ----------------- | -------------------- | ----------------------------------------------------------------------------------------------------------- | ----- |
-| **`imagePath`**   | <code>string</code>  | The path to the image to resize.                                                                            | 6.0.0 |
-| **`folderName`**  | <code>string</code>  | The name of the folder to store the resized images (optional, defaults to 'ResizedImages' if not provided). | 6.0.0 |
-| **`fileName`**    | <code>string</code>  | The name of the resized file without extension (optional, timestamp as name if not provided).               | 6.0.0 |
-| **`quality`**     | <code>number</code>  | The resized image quality (optional, defaults to 85 if not provided).                                       | 6.0.0 |
-| **`maxWidth`**    | <code>number</code>  | The max width of the resized image (optional, but at least either height or width must be provided).        | 6.0.0 |
-| **`maxHeight`**   | <code>number</code>  | The max height of the resized image (optional, but at least either width or height must be provided).       | 6.0.0 |
-| **`fixRotation`** | <code>boolean</code> | Fix the rotation of the image based on EXIF metadata (optional, defaults to false if not provided).         | 6.0.0 |
+| Prop              | Type                 | Description                                                                                                                | Since |
+| ----------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`imagePath`**   | <code>string</code>  | The path to the image to resize.                                                                                           | 6.0.0 |
+| **`folderName`**  | <code>string</code>  | (Android Only) The name of the folder to store the resized images (optional, defaults to 'ResizedImages' if not provided). | 6.0.0 |
+| **`fileName`**    | <code>string</code>  | The name of the resized file without extension (optional, timestamp as name if not provided).                              | 6.0.0 |
+| **`quality`**     | <code>number</code>  | The resized image quality (optional, defaults to 85 if not provided).                                                      | 6.0.0 |
+| **`maxWidth`**    | <code>number</code>  | The max width of the resized image (optional, but at least either height or width must be provided).                       | 6.0.0 |
+| **`maxHeight`**   | <code>number</code>  | The max height of the resized image (optional, but at least either width or height must be provided).                      | 6.0.0 |
+| **`fixRotation`** | <code>boolean</code> | Fix the rotation of the image based on EXIF metadata (optional, defaults to false if not provided).                        | 6.0.0 |
 
 </docgen-api>
 

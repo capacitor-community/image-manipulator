@@ -73,7 +73,7 @@ public class ImageManipulatorPlugin extends Plugin {
             ret.put("originalWidth", result.originalWidth());
             ret.put("originalHeight", result.originalHeight());
             ret.put("resizedWidth", result.resizedWidth());
-            ret.put("resizedHeight", result.maxHeight());
+            ret.put("resizedHeight", result.resizedHeight());
             ret.put("imagePath", result.imagePath());
             ret.put("webPath", result.webPath());
             ret.put("resized", result.resized());

@@ -19,7 +19,7 @@ export interface ResizeOptions {
   imagePath: string;
 
   /**
-   * The name of the folder to store the resized images (optional, defaults to 'ResizedImages' if not provided).
+   * (Android Only) The name of the folder to store the resized images (optional, defaults to 'ResizedImages' if not provided).
    * 
    * @since 6.0.0
    */

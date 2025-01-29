@@ -112,7 +112,9 @@ export class HomePage {
 
       const resizeOptions: ResizeOptions = {
         imagePath: image.path,
-        quality: 100, fixRotation: true, fileName: `ResizedImage_${new Date().getTime()}`,
+        quality: 100,
+        fixRotation: false, // true,
+        fileName: `ResizedImage_${new Date().getTime()}`,
         folderName: 'MyResizedImages'
       };
       if (this.maxWidth && isNaN(this.maxWidth) === false) {

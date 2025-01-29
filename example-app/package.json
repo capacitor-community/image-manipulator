@@ -21,7 +21,9 @@
     "build:dev:ios:sync:open": "npm run build:dev:ios:sync && cap open ios",
     "clear:cache": "rm -rf .angular/cache",
     "open:android": "cd .. && npm run build && cd example-app && npm run build:dev:android:sync:open",
-    "sync:android": "cd .. && npm run build && cd example-app && npm run build:dev:android:sync"
+    "sync:android": "cd .. && npm run build && cd example-app && npm run build:dev:android:sync",
+    "open:ios": "cd .. && npm run build && cd example-app && npm run build:dev:ios:sync:open",
+    "sync:ios": "cd .. && npm run build && cd example-app && npm run build:dev:ios:sync"
   },
   "private": true,
   "dependencies": {

@@ -4,7 +4,7 @@ public record ImageResizingResult(
         int originalWidth,
         int originalHeight,
         int resizedWidth,
-        int maxHeight,
+        int resizedHeight,
         String imagePath,
         String webPath,
         boolean resized
