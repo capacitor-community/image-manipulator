@@ -34,7 +34,9 @@
 
 ## About
 
-This plugins allows to resize images.
+This capcitor plugin allows reading image dimensions (width and height) and resize images.
+This plugin is inspired and similar to [cordova-plugin-image-resizer](https://github.com/JoschkaSchulz/cordova-plugin-image-resizer) plugin. Please note that it does not depend on **cordova-plugin-camera** plugin and can be used independently.
+
 <br>
 
 **Features:**
@@ -65,9 +67,9 @@ npx cap sync
 
 <docgen-index>
 
-* [`getDimensions(...)`](#getdimensions)
-* [`resize(...)`](#resize)
-* [Interfaces](#interfaces)
+- [`getDimensions(...)`](#getdimensions)
+- [`resize(...)`](#resize)
+- [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -90,8 +92,7 @@ Get dimensions of an image (width and height)
 
 **Since:** 6.0.0
 
---------------------
-
+---
 
 ### resize(...)
 
@@ -110,18 +111,15 @@ If the image width and height are less than the provided maxWidth and maxHeight,
 
 **Since:** 6.0.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### GetDimensionsOptions
 
 | Prop            | Type                | Description                                  | Since |
 | --------------- | ------------------- | -------------------------------------------- | ----- |
 | **`imagePath`** | <code>string</code> | The path to the image to get its dimensions. | 6.0.0 |
-
 
 #### ResizeOptions
 
@@ -138,6 +136,8 @@ If the image width and height are less than the provided maxWidth and maxHeight,
 </docgen-api>
 
 ## Usage
+
+Please also see **example-app** for a complete example.
 
 ### Resize image
 

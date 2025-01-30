@@ -9,16 +9,16 @@ public class ImageManipulatorPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "ImageManipulatorPlugin"
     public let jsName = "ImageManipulator"
     public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(
-            name: "getDimensions", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getDimensions", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "resize", returnType: CAPPluginReturnPromise),
     ]
 
-    // Message constants
-    // static let INVALID_URL_ERROR = "Invalid URL";
+    // NOTE: Error message constants
     static let FAILED_TO_LOAD_IMAGE_ERROR = "Failed to load image"
+    static let FAILED_TO_CREATE_IMAGE_DATA_ERROR = "Failed to create image data"
+    static let FAILED_TO_SAVE_RESIZED_IMAGE_ERROR = "Failed to save resized image"
+    static let FAILED_TO_GET_RESIZED_JPEG_IMAGE_FROM_DATA_ERROR = "Failed to get resized JPEG image from data"
 
-    // private let implementation = ImageManipulator()
     private var implementation: ImageManipulator?
     override public func load() {
         guard let bridge = bridge else { return }
@@ -26,12 +26,6 @@ public class ImageManipulatorPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func getDimensions(_ call: CAPPluginCall) {
-        /*
-        let value = call.getString("value") ?? ""
-        call.resolve([
-            "value": implementation.echo(value)
-        ])
-        */
 
         guard let imagePath = call.options["imagePath"] as? String else {
             call.reject("Must provide an imagePath")
@@ -49,15 +43,15 @@ public class ImageManipulatorPlugin: CAPPlugin, CAPBridgedPlugin {
                 "width": dimensions.width,
                 "height": dimensions.height,
             ])
-        } /* catch ImageProcessingError.invalidURL {
-            call.reject(ExifPlugin.INVALID_URL_ERROR)
-        } */
-        catch ImageManipulatorError.failedToLoadImage {
+        } catch ImageManipulatorError.failedToLoadImage {
             call.reject(ImageManipulatorPlugin.FAILED_TO_LOAD_IMAGE_ERROR)
-        }/*catch ImageProcessingError.noGPSData {
-            call.resolve()
-        } */
-        catch {
+        } catch ImageManipulatorError.failedToCreateImageData {
+            call.reject(ImageManipulatorPlugin.FAILED_TO_CREATE_IMAGE_DATA_ERROR)
+        } catch ImageManipulatorError.failedToSaveResizedImage {
+            call.reject(ImageManipulatorPlugin.FAILED_TO_SAVE_RESIZED_IMAGE_ERROR)
+        } catch ImageManipulatorError.failedToGetResizedJPEGImageFromData {
+            call.reject(ImageManipulatorPlugin.FAILED_TO_GET_RESIZED_JPEG_IMAGE_FROM_DATA_ERROR)
+        } catch {
             call.reject(error.localizedDescription, nil, error)
         }
     }
@@ -95,22 +89,21 @@ public class ImageManipulatorPlugin: CAPPlugin, CAPBridgedPlugin {
                 "resizedWidth": imageResizingResult.resizedWidth,
                 "resizedHeight": imageResizingResult.resizedHeight,
                 "imagePath": imageResizingResult.imagePath,
-                // "webPath": imageResizingResult.webPath,
                 "resized": imageResizingResult.resized
             ]
             if (imageResizingResult.webPath != nil && !imageResizingResult.webPath!.isEmpty) {
                 result["webPath"] = imageResizingResult.webPath
             }
             call.resolve(result)
-        } /* catch ImageProcessingError.invalidURL {
-          call.reject(ExifPlugin.INVALID_URL_ERROR)
-          } */
-        catch ImageManipulatorError.failedToLoadImage {
+        } catch ImageManipulatorError.failedToLoadImage {
             call.reject(ImageManipulatorPlugin.FAILED_TO_LOAD_IMAGE_ERROR)
-        }/*catch ImageProcessingError.noGPSData {
-              call.resolve()
-          } */
-        catch {
+        } catch ImageManipulatorError.failedToCreateImageData {
+            call.reject(ImageManipulatorPlugin.FAILED_TO_CREATE_IMAGE_DATA_ERROR)
+        } catch ImageManipulatorError.failedToSaveResizedImage {
+            call.reject(ImageManipulatorPlugin.FAILED_TO_SAVE_RESIZED_IMAGE_ERROR)
+        } catch ImageManipulatorError.failedToGetResizedJPEGImageFromData {
+            call.reject(ImageManipulatorPlugin.FAILED_TO_GET_RESIZED_JPEG_IMAGE_FROM_DATA_ERROR)
+        } catch {
             call.reject(error.localizedDescription, nil, error)
         }
 

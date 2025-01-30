@@ -9,6 +9,11 @@ import UIKit
 
 extension UIImage {
 
+    /// Method to get the final image dimensions
+    ///
+    /// - Parameter maxWidth required image width
+    /// - Parameter maxHeight required image width
+    /// - Returns: Final image dimensions
     func getResultingImageDimensions(maxWidth: Int, maxHeight: Int) -> CGSize {
         let originalWidth = Int(self.size.width)
         let originalHeight = Int(self.size.height)
@@ -16,24 +21,24 @@ extension UIImage {
         var finalWidth = maxWidth
         var finalHeight = maxHeight
 
-        // If both maxWidth and maxHeight are not provided, return original dimensions
+        // NOTE: if both maxWidth and maxHeight are not provided, return original dimensions
         if finalWidth <= 0 && finalHeight <= 0 {
             finalWidth = originalWidth
             finalHeight = originalHeight
         }
-        // When only maxWidth is provided
+        // NOTE: when only maxWidth is provided
         else if finalWidth > 0 && finalHeight <= 0 {
             finalHeight = Int(
                 (Float(finalWidth) / Float(originalWidth))
                     * Float(originalHeight))
         }
-        // When only maxHeight is provided
+        // NOTE: when only maxHeight is provided
         else if finalWidth <= 0 {
             finalWidth = Int(
                 (Float(finalHeight) / Float(originalHeight))
                     * Float(originalWidth))
         }
-        // When both maxWidth and maxHeight are provided, maintain aspect ratio
+        // NOTE: when both maxWidth and maxHeight are provided, maintain aspect ratio
         else {
             let originalAspectRatio =
                 Float(originalWidth) / Float(originalHeight)
@@ -44,88 +49,50 @@ extension UIImage {
             }
         }
 
-        return CGSize(width: finalWidth, height: finalHeight)
+        let scale: Float = Float(self.scale)
+        return CGSize(width: Int(Float(finalWidth) / scale), height: Int(Float(finalHeight) / scale))
     }
 
-    func resize(
-        // to targetSize: CGSize? = nil,
-        maxWidth: Int, maxHeight: Int, fixRotation: Bool = true
-    ) -> UIImage {
+    /// Method to resize image
+    ///
+    /// - Parameter maxWidth required image width
+    /// - Parameter maxHeight required image width
+    /// - Returns: Resized image
+    func resize(maxWidth: Int, maxHeight: Int) -> UIImage {
         guard let cgImage = self.cgImage else { return self }
 
-        var transform = CGAffineTransform.identity
-        var originalSize = CGSize(width: cgImage.width, height: cgImage.height)
+        let finalSize: CGSize = self.getResultingImageDimensions(maxWidth: maxWidth, maxHeight: maxHeight)
 
-        if fixRotation {
-            let orientation = self.imageOrientation
-
-            // Calculate the transformation based on the EXIF orientation
-            switch orientation {
-            case .down, .downMirrored:
-                transform = transform.rotated(by: .pi)
-            case .left, .leftMirrored:
-                transform = transform.rotated(by: .pi / 2)
-            case .right, .rightMirrored:
-                transform = transform.rotated(by: -.pi / 2)
-            default:
-                break
-            }
-
-            // Apply mirroring for mirrored orientations
-            switch orientation {
-            case .upMirrored, .downMirrored:
-                transform = transform.translatedBy(
-                    x: CGFloat(cgImage.width), y: 0
-                ).scaledBy(x: -1, y: 1)
-            case .leftMirrored, .rightMirrored:
-                transform = transform.translatedBy(
-                    x: CGFloat(cgImage.height), y: 0
-                ).scaledBy(x: -1, y: 1)
-            default:
-                break
-            }
-
-            // Swap width & height for 90° or 270° rotations
-            if orientation == .left || orientation == .leftMirrored
-                || orientation == .right || orientation == .rightMirrored
-            {
-                originalSize = CGSize(
-                    width: originalSize.height, height: originalSize.width)
-            }
+        // NOTE: normalize scale to 1.0 to avoid unexpected size increases
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1.0
+        
+        // NOTE: draw the resized image
+        let renderer = UIGraphicsImageRenderer(size: finalSize, format: format)
+        let resizedImage = renderer.image { _ in
+            self.draw(in: CGRect(origin: .zero, size: finalSize))
         }
+        return resizedImage
+    }
+    
+    /// Method to correct or fix image orientation based on EXIF orientation, and ensure the image to be oriented properly.
+    ///
+    /// - Returns: correctly oriented image
+    func fixOrientation() -> UIImage {
+        // NOTE: ensure that the image has a valid cgImage (underlying pixel data)
+        guard self.cgImage != nil else { return self }
 
-        // Determine new size while maintaining aspect ratio
-        /*
-        var newSize = originalSize
-        if let targetSize = targetSize {
-            let widthRatio = targetSize.width / originalSize.width
-            let heightRatio = targetSize.height / originalSize.height
-            let scaleFactor = min(widthRatio, heightRatio)  // Maintain aspect ratio
-            newSize = CGSize(
-                width: originalSize.width * scaleFactor,
-                height: originalSize.height * scaleFactor)
+        // NOTE: create a new image context with the current image's size and scale
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 1.0  // Prevent scaling by the screen's scale factor
+
+        // NOTE: create a renderer to apply the fix (draw the image correctly based on orientation)
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
+
+        // NOTE: Draw the image into the renderer context
+        return renderer.image { _ in
+            self.draw(in: CGRect(origin: .zero, size: size))
         }
-        */
-        let newSize: CGSize = self.getResultingImageDimensions(maxWidth: maxWidth, maxHeight: maxHeight)
-
-        // Draw the transformed and resized image
-        let renderer = UIGraphicsImageRenderer(size: newSize)
-        let newImage = renderer.image { context in
-            let ctx = context.cgContext
-            ctx.translateBy(x: newSize.width / 2, y: newSize.height / 2)
-            if fixRotation {
-                ctx.concatenate(transform)
-            }
-            ctx.translateBy(
-                x: -originalSize.width / 2, y: -originalSize.height / 2)
-            ctx.draw(
-                cgImage,
-                in: CGRect(
-                    x: 0, y: 0, width: originalSize.width,
-                    height: originalSize.height))
-        }
-
-        return newImage
     }
 
 }

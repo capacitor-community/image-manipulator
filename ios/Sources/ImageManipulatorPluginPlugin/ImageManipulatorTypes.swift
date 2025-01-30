@@ -1,28 +1,5 @@
-/*
- struct CameraPromptText {
-    let title: String
-    let photoAction: String
-    let cameraAction: String
-    let cancelAction: String
-
-    init(title: String? = nil, photoAction: String? = nil, cameraAction: String? = nil, cancelAction: String? = nil) {
-        self.title = title ?? "Photo"
-        self.photoAction = photoAction ?? "From Photos"
-        self.cameraAction = cameraAction ?? "Take Picture"
-        self.cancelAction = cancelAction ?? "Cancel"
-    }
-}
-
-public struct CameraResult {
-    let image: UIImage?
-    let metadata: [AnyHashable: Any]
-}
-*/
-
 public enum ImageManipulatorError: Error {
-    // case invalidURL
     case failedToLoadImage
-    // case failedToGetPortablePathToFile
     case failedToCreateImageData
     case failedToSaveResizedImage
     case failedToGetResizedJPEGImageFromData

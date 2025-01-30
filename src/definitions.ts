@@ -33,7 +33,7 @@ export interface ResizeOptions {
   fileName?: string;
 
   /**
-   * The resized image quality (optional, defaults to 85 if not provided).
+   * The resized image quality from 0 to 100, where 100 is max (optional, defaults to 85 if not provided).
    * 
    * @since 6.0.0
    */

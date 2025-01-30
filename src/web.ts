@@ -4,7 +4,6 @@ import type { ImageManipulatorPlugin } from './definitions';
 
 export class ImageManipulatorWeb extends WebPlugin implements ImageManipulatorPlugin {
 
-
   public async getDimensions(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _options: {
@@ -15,7 +14,6 @@ export class ImageManipulatorWeb extends WebPlugin implements ImageManipulatorPl
   }> {
     throw new Error('This method is not available on the web platform.');
   }
-
 
   public async resize(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
