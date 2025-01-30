@@ -67,9 +67,9 @@ npx cap sync
 
 <docgen-index>
 
-- [`getDimensions(...)`](#getdimensions)
-- [`resize(...)`](#resize)
-- [Interfaces](#interfaces)
+* [`getDimensions(...)`](#getdimensions)
+* [`resize(...)`](#resize)
+* [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -92,7 +92,8 @@ Get dimensions of an image (width and height)
 
 **Since:** 6.0.0
 
----
+--------------------
+
 
 ### resize(...)
 
@@ -100,8 +101,13 @@ Get dimensions of an image (width and height)
 resize(options: ResizeOptions) => Promise<{ originalWidth: number; originalHeight: number; resizedWidth: number; resizedHeight: number; imagePath: string; webPath: string; resized: boolean; }>
 ```
 
-Method to resize an image
-If the image width and height are less than the provided maxWidth and maxHeight, the image will not be resized.
+Method to resize an image based on the provided options and return the resized image details. Please note that the resized
+image will respect the aspect ratio of the original image and will be resized to be equal to less of the provided maxWidth or maxHeight.
+If the image both width and height are less than the provided maxWidth and maxHeight, the image will not be resized
+and the original image details will be returned with resized as false.
+If either maxWidth or maxHeight is not provided or 0, this parameter will be ignored (not used) and the image will be
+resized based on the provided maxWidth or maxHeight, accordingly.
+Please note that either maxWidth or maxHeight must be provided to resize an image.
 
 | Param         | Type                                                    | Description                |
 | ------------- | ------------------------------------------------------- | -------------------------- |
@@ -111,15 +117,18 @@ If the image width and height are less than the provided maxWidth and maxHeight,
 
 **Since:** 6.0.0
 
----
+--------------------
+
 
 ### Interfaces
+
 
 #### GetDimensionsOptions
 
 | Prop            | Type                | Description                                  | Since |
 | --------------- | ------------------- | -------------------------------------------- | ----- |
 | **`imagePath`** | <code>string</code> | The path to the image to get its dimensions. | 6.0.0 |
+
 
 #### ResizeOptions
 
@@ -128,7 +137,7 @@ If the image width and height are less than the provided maxWidth and maxHeight,
 | **`imagePath`**   | <code>string</code>  | The path to the image to resize.                                                                                           | 6.0.0 |
 | **`folderName`**  | <code>string</code>  | (Android Only) The name of the folder to store the resized images (optional, defaults to 'ResizedImages' if not provided). | 6.0.0 |
 | **`fileName`**    | <code>string</code>  | The name of the resized file without extension (optional, timestamp as name if not provided).                              | 6.0.0 |
-| **`quality`**     | <code>number</code>  | The resized image quality (optional, defaults to 85 if not provided).                                                      | 6.0.0 |
+| **`quality`**     | <code>number</code>  | The resized image quality from 0 to 100, where 100 is max (optional, defaults to 85 if not provided).                      | 6.0.0 |
 | **`maxWidth`**    | <code>number</code>  | The max width of the resized image (optional, but at least either height or width must be provided).                       | 6.0.0 |
 | **`maxHeight`**   | <code>number</code>  | The max height of the resized image (optional, but at least either width or height must be provided).                      | 6.0.0 |
 | **`fixRotation`** | <code>boolean</code> | Fix the rotation of the image based on EXIF metadata (optional, defaults to false if not provided).                        | 6.0.0 |

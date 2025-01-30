@@ -76,8 +76,13 @@ export interface ImageManipulatorPlugin {
   }>;
 
   /**
-   * Method to resize an image
-   * If the image width and height are less than the provided maxWidth and maxHeight, the image will not be resized.
+   * Method to resize an image based on the provided options and return the resized image details. Please note that the resized
+   * image will respect the aspect ratio of the original image and will be resized to be equal to less of the provided maxWidth or maxHeight.
+   * If the image both width and height are less than the provided maxWidth and maxHeight, the image will not be resized
+   * and the original image details will be returned with resized as false.
+   * If either maxWidth or maxHeight is not provided or 0, this parameter will be ignored (not used) and the image will be
+   * resized based on the provided maxWidth or maxHeight, accordingly.
+   * Please note that either maxWidth or maxHeight must be provided to resize an image.
    *
    * @since 6.0.0 
    * @param options Options to resize an image

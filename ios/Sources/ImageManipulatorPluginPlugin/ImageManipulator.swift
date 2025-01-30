@@ -67,17 +67,12 @@ import Foundation
         // NOTE: resize the image to the required dimensions
         let resizedImage: UIImage = image.resize(maxWidth: maxWidth, maxHeight: maxHeight)
         
-        print("resizedImage size: \(resizedImage.size)")
-        print("resizedImage scale: \(resizedImage.scale)")
-        
         let jpegQuality = min(abs(CGFloat(quality)) / 100.0, 1.0)
         guard let resizedAndCompressedImageData: Data = resizedImage.jpegData(compressionQuality: jpegQuality) else {
             throw ImageManipulatorError.failedToCreateImageData
         }
         
         let finalImage: UIImage = UIImage(data: resizedAndCompressedImageData)!
-        print("finalImage size: \(finalImage.size)")
-        print("finalImage scale: \(finalImage.scale)")
 
         let resizedImageURL: URL? = try? saveResizedImage(data: resizedAndCompressedImageData, fileName: fileName)
         
@@ -95,7 +90,7 @@ import Foundation
                 originalHeight: imageDimensions.height,
                 resizedWidth: Int(resizedWidth),
                 resizedHeight: Int(resizedHeight),
-                imagePath: imagePath,
+                imagePath: resizedImageURL.absoluteString,
                 webPath: resizedWebPath,
                 resized: true
             )
