@@ -45,10 +45,13 @@ This plugin is inspired and similar to [cordova-plugin-image-resizer](https://gi
 - supports resizing image
 - supports Android and iOS platforms
 
+**NOTE**: The plugin version 7.0.0 is compatible with Capacitor 7
+
 ## Plugin versions
 
 | Capacitor version | Plugin version |
 | ----------------- | -------------- |
+| 7.x               | 7.x            |
 | 6.x               | 6.x            |
 
 ## Supported Platforms
