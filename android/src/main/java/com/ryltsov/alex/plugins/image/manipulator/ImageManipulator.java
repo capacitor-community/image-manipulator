@@ -6,11 +6,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
-
 import com.getcapacitor.Bridge;
 import com.getcapacitor.FileUtils;
 import com.getcapacitor.Logger;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,7 +32,6 @@ public class ImageManipulator {
      * @return image dimensions (width and height)
      */
     public ImageDimensions getDimensions(String imagePath) throws ImageManipulatorException {
-
         InputStream imageStream = null;
 
         try {
@@ -82,21 +79,17 @@ public class ImageManipulator {
      * @return resized image info
      */
     public ImageResizingResult resize(
-            String imagePath,
-            String folderName,
-            String fileName,
-            int quality,
-            int maxWidth,
-            int maxHeight,
-            boolean fixRotation
+        String imagePath,
+        String folderName,
+        String fileName,
+        int quality,
+        int maxWidth,
+        int maxHeight,
+        boolean fixRotation
     ) throws ImageManipulatorException {
-
         ImageDimensions dimensions = getDimensions(imagePath);
 
-        if (
-                (maxWidth == 0 || maxWidth >= dimensions.width()) &&
-                (maxHeight == 0 || maxHeight >= dimensions.height())
-        ) {
+        if ((maxWidth == 0 || maxWidth >= dimensions.width()) && (maxHeight == 0 || maxHeight >= dimensions.height())) {
             Uri imageUri = Uri.parse(imagePath);
             String webPath = FileUtils.getPortablePath(context, bridge.getLocalUrl(), imageUri);
             return new ImageResizingResult(
@@ -111,11 +104,11 @@ public class ImageManipulator {
         }
 
         ImageResizingResultBase imageResizingResultBase = this.decodeScaledBitmapFromUri(
-                imagePath,
-                dimensions.width(),
-                dimensions.height(),
-                maxWidth,
-                maxHeight
+            imagePath,
+            dimensions.width(),
+            dimensions.height(),
+            maxWidth,
+            maxHeight
         );
 
         Bitmap bitmap = imageResizingResultBase.scaledBitmap();
@@ -128,15 +121,10 @@ public class ImageManipulator {
             // NOTE: Get the exif rotation in degrees, create a transformation matrix, and rotate the bitmap
             int rotation = getRotationDegrees(getRotation(imagePath));
             Matrix matrix = new Matrix();
-            if (rotation != 0f) {matrix.preRotate(rotation);}
-            bitmap = Bitmap.createBitmap(
-                    bitmap,
-                    0,
-                    0,
-                    bitmap.getWidth(),
-                    bitmap.getHeight(),
-                    matrix,
-                    true);
+            if (rotation != 0f) {
+                matrix.preRotate(rotation);
+            }
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         }
 
         Uri savedScaledFileUri = FileHelper.saveFile(this.context, bitmap, folderName, fileName, quality);
@@ -146,15 +134,14 @@ public class ImageManipulator {
 
         String webPath = FileUtils.getPortablePath(context, bridge.getLocalUrl(), savedScaledFileUri);
         return new ImageResizingResult(
-                imageResizingResultBase.originalWidth(),
-                imageResizingResultBase.originalHeight(),
-                imageResizingResultBase.resizedWidth(),
-                imageResizingResultBase.resizedHeight(),
-                savedScaledFileUri.toString(),
-                webPath,
-                imageResizingResultBase.resized()
+            imageResizingResultBase.originalWidth(),
+            imageResizingResultBase.originalHeight(),
+            imageResizingResultBase.resizedWidth(),
+            imageResizingResultBase.resizedHeight(),
+            savedScaledFileUri.toString(),
+            webPath,
+            imageResizingResultBase.resized()
         );
-
     }
 
     /**
@@ -170,31 +157,24 @@ public class ImageManipulator {
      * @return resized image info
      **/
     private ImageResizingResultBase decodeScaledBitmapFromUri(
-            String imagePath,
-            int originalWidth,
-            int originalHeight,
-            int maxWidth,
-            int maxHeight
+        String imagePath,
+        int originalWidth,
+        int originalHeight,
+        int maxWidth,
+        int maxHeight
     ) throws ImageManipulatorException {
-
         InputStream imageStreamForUnscaledBitmap = null;
 
         try {
-
-            ImageDimensions resultingImageDimensions = getResultingImageDimensions(
-                    originalWidth,
-                    originalHeight,
-                    maxWidth,
-                    maxHeight
-            );
+            ImageDimensions resultingImageDimensions = getResultingImageDimensions(originalWidth, originalHeight, maxWidth, maxHeight);
 
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = false;
             options.inSampleSize = calculateInSampleSize(
-                    originalWidth,
-                    originalHeight,
-                    resultingImageDimensions.width(),
-                    resultingImageDimensions.height()
+                originalWidth,
+                originalHeight,
+                resultingImageDimensions.width(),
+                resultingImageDimensions.height()
             );
             imageStreamForUnscaledBitmap = FileHelper.getInputStream(this.context, imagePath);
             Bitmap unscaledBitmap = BitmapFactory.decodeStream(imageStreamForUnscaledBitmap, null, options);
@@ -202,8 +182,20 @@ public class ImageManipulator {
                 Logger.error("ImageManipulator image data could not be decoded");
                 throw new ImageManipulatorException("Image data could not be decoded");
             }
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(unscaledBitmap, resultingImageDimensions.width(), resultingImageDimensions.height(), true);
-            return new ImageResizingResultBase(scaledBitmap, originalWidth, originalHeight, resultingImageDimensions.width(), resultingImageDimensions.height(), true);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(
+                unscaledBitmap,
+                resultingImageDimensions.width(),
+                resultingImageDimensions.height(),
+                true
+            );
+            return new ImageResizingResultBase(
+                scaledBitmap,
+                originalWidth,
+                originalHeight,
+                resultingImageDimensions.width(),
+                resultingImageDimensions.height(),
+                true
+            );
         } catch (OutOfMemoryError ex) {
             Logger.error("ImageManipulator OutOfMemoryError exception occurred", ex);
             throw new ImageManipulatorException("Out of memory: " + ex.getMessage());
@@ -237,13 +229,7 @@ public class ImageManipulator {
      * @param maxHeight required image width
      * @return resulting width and height
      */
-    private ImageDimensions getResultingImageDimensions(
-            int originalWidth,
-            int originalHeight,
-            int maxWidth,
-            int maxHeight
-    ) {
-
+    private ImageDimensions getResultingImageDimensions(int originalWidth, int originalHeight, int maxWidth, int maxHeight) {
         int finalWidth = maxWidth;
         int finalHeight = maxHeight;
 
@@ -254,11 +240,11 @@ public class ImageManipulator {
         }
         // NOTE: when only required width was provided
         else if (finalWidth > 0 && finalHeight <= 0) {
-            finalHeight = (int) (((float)finalWidth / (float)originalWidth) * originalHeight);
+            finalHeight = (int) (((float) finalWidth / (float) originalWidth) * originalHeight);
         }
         // NOTE: when only required height was provided
         else if (finalWidth <= 0) {
-            finalWidth = (int) (((float)finalHeight / (float)originalHeight) * originalWidth);
+            finalWidth = (int) (((float) finalHeight / (float) originalHeight) * originalWidth);
         }
         // NOTE: when both required width and height are provided
         else {
@@ -283,12 +269,7 @@ public class ImageManipulator {
      * @param maxHeight required image width
      * @return inSampleSize value
      */
-    private int calculateInSampleSize(
-            int originalWidth,
-            int originalHeight,
-            int maxWidth,
-            int maxHeight
-    ) {
+    private int calculateInSampleSize(int originalWidth, int originalHeight, int maxWidth, int maxHeight) {
         final float originalAspectRatio = (float) originalWidth / (float) originalHeight;
         final float requiredAspectRatio = (float) maxWidth / (float) maxHeight;
 
@@ -305,12 +286,14 @@ public class ImageManipulator {
      * @param exifOrientation ExifInterface.ORIENTATION_* representation of the rotation
      * @return the rotation in degrees
      */
-    private int getRotationDegrees(
-            int exifOrientation
-    ) {
-        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
-        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
-        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }
+    private int getRotationDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            return 270;
+        }
         return 0;
     }
 
@@ -320,9 +303,7 @@ public class ImageManipulator {
      * @param imageUri the URI of the image to get the rotation for
      * @return ExifInterface.ORIENTATION_* representation of the rotation
      */
-    private int getRotation(
-            String imageUri
-    ) {
+    private int getRotation(String imageUri) {
         try {
             ExifInterface exif = new ExifInterface(imageUri);
             return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
@@ -330,5 +311,4 @@ public class ImageManipulator {
             return ExifInterface.ORIENTATION_NORMAL;
         }
     }
-
 }

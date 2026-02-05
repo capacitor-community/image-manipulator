@@ -18,7 +18,6 @@ public class ImageManipulatorPlugin extends Plugin {
 
     @PluginMethod
     public void getDimensions(PluginCall call) {
-
         String imagePath = call.getString("imagePath");
 
         if (imagePath == null || imagePath.isEmpty()) {
@@ -41,7 +40,6 @@ public class ImageManipulatorPlugin extends Plugin {
 
     @PluginMethod
     public void resize(PluginCall call) {
-
         String imagePath = call.getString("imagePath");
         if (imagePath == null || imagePath.isEmpty()) {
             call.reject("The imagePath param is null or empty.");
@@ -60,15 +58,7 @@ public class ImageManipulatorPlugin extends Plugin {
         boolean fixRotation = call.getBoolean("fixRotation", false); // false;
 
         try {
-            ImageResizingResult result = implementation.resize(
-                    imagePath,
-                    folderName,
-                    fileName,
-                    quality,
-                    maxWidth,
-                    maxHeight,
-                    fixRotation
-            );
+            ImageResizingResult result = implementation.resize(imagePath, folderName, fileName, quality, maxWidth, maxHeight, fixRotation);
             JSObject ret = new JSObject();
             ret.put("originalWidth", result.originalWidth());
             ret.put("originalHeight", result.originalHeight());
@@ -83,7 +73,5 @@ public class ImageManipulatorPlugin extends Plugin {
         } catch (Exception ex) {
             call.reject("An error occurred: " + ex.getMessage());
         }
-
     }
-
 }

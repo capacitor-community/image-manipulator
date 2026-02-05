@@ -13,11 +13,13 @@ public class ImageManipulatorPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "resize", returnType: CAPPluginReturnPromise),
     ]
 
-    // NOTE: Error message constants
-    static let FAILED_TO_LOAD_IMAGE_ERROR = "Failed to load image"
-    static let FAILED_TO_CREATE_IMAGE_DATA_ERROR = "Failed to create image data"
-    static let FAILED_TO_SAVE_RESIZED_IMAGE_ERROR = "Failed to save resized image"
-    static let FAILED_TO_GET_RESIZED_JPEG_IMAGE_FROM_DATA_ERROR = "Failed to get resized JPEG image from data"
+    // NOTE: Error code constants
+    private enum ErrorCodes {
+        static let failedToLoadImage = "FAILED_TO_LOAD_IMAGE_ERROR"
+        static let failedToCreateImageData = "FAILED_TO_CREATE_IMAGE_DATA_ERROR"
+        static let failedToSaveResizedImage = "FAILED_TO_SAVE_RESIZED_IMAGE_ERROR"
+        static let failedToGetResizedJpegImageFromData = "FAILED_TO_GET_RESIZED_JPEG_IMAGE_FROM_DATA_ERROR"
+    }
 
     private var implementation: ImageManipulator?
     override public func load() {
@@ -44,13 +46,13 @@ public class ImageManipulatorPlugin: CAPPlugin, CAPBridgedPlugin {
                 "height": dimensions.height,
             ])
         } catch ImageManipulatorError.failedToLoadImage {
-            call.reject(ImageManipulatorPlugin.FAILED_TO_LOAD_IMAGE_ERROR)
+            call.reject(ErrorCodes.failedToLoadImage)
         } catch ImageManipulatorError.failedToCreateImageData {
-            call.reject(ImageManipulatorPlugin.FAILED_TO_CREATE_IMAGE_DATA_ERROR)
+            call.reject(ErrorCodes.failedToCreateImageData)
         } catch ImageManipulatorError.failedToSaveResizedImage {
-            call.reject(ImageManipulatorPlugin.FAILED_TO_SAVE_RESIZED_IMAGE_ERROR)
+            call.reject(ErrorCodes.failedToSaveResizedImage)
         } catch ImageManipulatorError.failedToGetResizedJPEGImageFromData {
-            call.reject(ImageManipulatorPlugin.FAILED_TO_GET_RESIZED_JPEG_IMAGE_FROM_DATA_ERROR)
+            call.reject(ErrorCodes.failedToGetResizedJpegImageFromData)
         } catch {
             call.reject(error.localizedDescription, nil, error)
         }
@@ -96,13 +98,13 @@ public class ImageManipulatorPlugin: CAPPlugin, CAPBridgedPlugin {
             }
             call.resolve(result)
         } catch ImageManipulatorError.failedToLoadImage {
-            call.reject(ImageManipulatorPlugin.FAILED_TO_LOAD_IMAGE_ERROR)
+            call.reject(ErrorCodes.failedToLoadImage)
         } catch ImageManipulatorError.failedToCreateImageData {
-            call.reject(ImageManipulatorPlugin.FAILED_TO_CREATE_IMAGE_DATA_ERROR)
+            call.reject(ErrorCodes.failedToCreateImageData)
         } catch ImageManipulatorError.failedToSaveResizedImage {
-            call.reject(ImageManipulatorPlugin.FAILED_TO_SAVE_RESIZED_IMAGE_ERROR)
+            call.reject(ErrorCodes.failedToSaveResizedImage)
         } catch ImageManipulatorError.failedToGetResizedJPEGImageFromData {
-            call.reject(ImageManipulatorPlugin.FAILED_TO_GET_RESIZED_JPEG_IMAGE_FROM_DATA_ERROR)
+            call.reject(ErrorCodes.failedToGetResizedJpegImageFromData)
         } catch {
             call.reject(error.localizedDescription, nil, error)
         }
