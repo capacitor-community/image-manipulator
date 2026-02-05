@@ -8,11 +8,6 @@ public enum ImageManipulatorError: Error {
 struct ImageDimensions {
     let width: Int
     let height: Int
-
-    init(width: Int, height: Int) {
-        self.width = width
-        self.height = height
-    }
 }
 
 struct ImageResizingResult {
@@ -23,17 +18,4 @@ struct ImageResizingResult {
     let imagePath: String
     let webPath: String?
     let resized: Bool
-
-    init(
-        originalWidth: Int, originalHeight: Int, resizedWidth: Int,
-        resizedHeight: Int, imagePath: String, webPath: String?, resized: Bool
-    ) {
-        self.originalWidth = originalWidth
-        self.originalHeight = originalHeight
-        self.resizedWidth = resizedWidth
-        self.resizedHeight = resizedHeight
-        self.imagePath = imagePath
-        self.webPath = webPath
-        self.resized = resized
-    }
 }

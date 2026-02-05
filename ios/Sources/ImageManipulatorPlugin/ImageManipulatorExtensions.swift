@@ -66,7 +66,7 @@ extension UIImage {
         // NOTE: normalize scale to 1.0 to avoid unexpected size increases
         let format = UIGraphicsImageRendererFormat()
         format.scale = 1.0
-        
+
         // NOTE: draw the resized image
         let renderer = UIGraphicsImageRenderer(size: finalSize, format: format)
         let resizedImage = renderer.image { _ in
@@ -74,7 +74,7 @@ extension UIImage {
         }
         return resizedImage
     }
-    
+
     /// Method to correct or fix image orientation based on EXIF orientation, and ensure the image to be oriented properly.
     ///
     /// - Returns: correctly oriented image
