@@ -15,10 +15,10 @@ public class ImageManipulatorPlugin: CAPPlugin, CAPBridgedPlugin {
 
     // NOTE: Error code constants
     private enum ErrorCodes {
-        static let failedToLoadImage = "FAILED_TO_LOAD_IMAGE_ERROR"
-        static let failedToCreateImageData = "FAILED_TO_CREATE_IMAGE_DATA_ERROR"
-        static let failedToSaveResizedImage = "FAILED_TO_SAVE_RESIZED_IMAGE_ERROR"
-        static let failedToGetResizedJpegImageFromData = "FAILED_TO_GET_RESIZED_JPEG_IMAGE_FROM_DATA_ERROR"
+        static let failedToLoadImage = "Failed to load image"
+        static let failedToCreateImageData = "Failed to create image data"
+        static let failedToSaveResizedImage = "Failed to save resized image"
+        static let failedToGetResizedJpegImageFromData = "Failed to get resized JPEG image from data"
     }
 
     private var implementation: ImageManipulator?
