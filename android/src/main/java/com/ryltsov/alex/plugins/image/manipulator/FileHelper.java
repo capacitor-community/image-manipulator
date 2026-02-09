@@ -3,17 +3,15 @@ package com.ryltsov.alex.plugins.image.manipulator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
-
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class FileHelper {
 
-    public static InputStream getInputStream (Context context, String uriString) throws IOException {
-
+    public static InputStream getInputStream(Context context, String uriString) throws IOException {
         if (uriString == null || uriString.isEmpty()) {
             throw new IllegalArgumentException("The URI string is null or empty.");
         }
@@ -26,13 +24,8 @@ public class FileHelper {
         }
     }
 
-    public static Uri saveFile(
-            Context context,
-            Bitmap bitmap,
-            String folderName,
-            String fileName,
-            int quality
-    ) throws ImageManipulatorException {
+    public static Uri saveFile(Context context, Bitmap bitmap, String folderName, String fileName, int quality)
+        throws ImageManipulatorException {
         File folder = null;
         if (folderName.contains("/")) {
             folder = new File(folderName.replace("file://", ""));
@@ -65,7 +58,5 @@ public class FileHelper {
             throw new ImageManipulatorException("Failed to save resized file. " + ex);
         }
         return Uri.fromFile(file);
-
     }
-
 }
